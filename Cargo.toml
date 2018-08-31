@@ -1,0 +1,15 @@
+[package]
+authors = ["Moritz Gunz <moritz.gunz@gmail.com>"]
+description = "Sanitize clipboard URLs from tracking information"
+keywords = ["clipboard", "sanitize", "filter", "url", "tracking"]
+categories = ["command-line-utilities"]
+name = "sanitize-clipboard"
+version = "0.1.0"
+
+[profile.release]
+lto = true
+
+[dependencies]
+clap = "2.32.0"
+clipboard = "0.4.6"
+url = "1.7.1"
