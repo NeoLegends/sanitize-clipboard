@@ -44,11 +44,9 @@ fn sanitize_url(input: &mut Url) {
         .filter(|(k, _)| !k.starts_with("si")) // Spotify
         .collect::<Vec<_>>();
 
-    let mut query_pairs = input.query_pairs_mut();
-    query_pairs.clear();
-    if !new_query.is_empty() {
-        query_pairs.extend_pairs(new_query);
-    }
+    input.query_pairs_mut()
+        .clear()
+        .extend_pairs(new_query);
 }
 
 #[cfg(test)]
