@@ -1,8 +1,9 @@
-#[macro_use] extern crate clap;
+#[macro_use]
+extern crate clap;
 extern crate clipboard;
 extern crate url;
 
-use clap::{Arg, AppSettings};
+use clap::{AppSettings, Arg};
 use std::time::Duration;
 
 mod sanitize;
@@ -25,8 +26,8 @@ fn main() {
         .get_matches();
 
     let poll_interval = {
-        let millis = value_t!(matches.value_of(POLL_INTERVAL_PARAM), u64)
-            .unwrap_or_else(|e| e.exit());
+        let millis =
+            value_t!(matches.value_of(POLL_INTERVAL_PARAM), u64).unwrap_or_else(|e| e.exit());
         Duration::from_millis(millis)
     };
 

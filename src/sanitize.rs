@@ -1,18 +1,18 @@
-use std::time::Duration;
-use std::thread;
-
 use clipboard::{ClipboardContext, ClipboardProvider};
+use std::thread;
+use std::time::Duration;
 use url::Url;
 
 /// Polls the system's clipboard and tries to sanitize URLs from tracking information.
 pub fn sanitize_loop(interval: Duration) {
-    let mut ctx: ClipboardContext = ClipboardProvider::new()
-        .expect("Failed to initialize clipboard.");
+    let mut ctx: ClipboardContext =
+        ClipboardProvider::new().expect("Failed to initialize clipboard.");
 
     let mut current_clipboard_cnts = String::new();
 
     loop {
-        let clipboard_contents = ctx.get_contents()
+        let clipboard_contents = ctx
+            .get_contents()
             .expect("Failed to get clipboard contents.");
 
         if clipboard_contents == current_clipboard_cnts {
@@ -25,7 +25,7 @@ pub fn sanitize_loop(interval: Duration) {
             Err(_) => {
                 current_clipboard_cnts = clipboard_contents;
                 continue;
-            },
+            }
         };
 
         sanitize_url(&mut url);
@@ -44,9 +44,7 @@ fn sanitize_url(input: &mut Url) {
         .filter(|(k, _)| !k.starts_with("si")) // Spotify
         .collect::<Vec<_>>();
 
-    input.query_pairs_mut()
-        .clear()
-        .extend_pairs(new_query);
+    input.query_pairs_mut().clear().extend_pairs(new_query);
 }
 
 #[cfg(test)]
@@ -55,7 +53,9 @@ mod tests {
 
     #[test]
     fn sanitize_url_smoke() {
-        let mut url = "https://example.com/?utm_source=bla&utm_medium=hahaha".parse().unwrap();
+        let mut url = "https://example.com/?utm_source=bla&utm_medium=hahaha"
+            .parse()
+            .unwrap();
         let clean = "https://example.com/?".parse().unwrap();
 
         sanitize_url(&mut url);
@@ -64,7 +64,9 @@ mod tests {
 
     #[test]
     fn sanitize_url_dont_remove_all() {
-        let mut url = "https://example.com/?utm_source=bla&utm_medium=hahaha&test=hahah".parse().unwrap();
+        let mut url = "https://example.com/?utm_source=bla&utm_medium=hahaha&test=hahah"
+            .parse()
+            .unwrap();
         let clean = "https://example.com/?test=hahah".parse().unwrap();
 
         sanitize_url(&mut url);
